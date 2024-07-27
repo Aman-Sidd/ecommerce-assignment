@@ -12,6 +12,7 @@ const Header = () => {
         padding: 10,
         flexDirection: "row",
         alignItems: "center",
+        zIndex: 100,
       }}
     >
       <Pressable

@@ -22,6 +22,7 @@ import { StatusBar } from "expo-status-bar";
 
 const CartScreen = ({ navigation }) => {
   const cart = useSelector((state) => state.cart.cart);
+  console.log("CART:", cart);
   const total = cart
     ?.map((item) => item.price * item.quantity)
     .reduce((acc, curr) => acc + curr, 0)
@@ -178,7 +179,7 @@ const CartScreen = ({ navigation }) => {
       </View>
     );
   };
-  console.log("cart:", cart);
+
   return (
     <SafeAreaView style={{ backgroundColor: "white", paddingBottom: 150 }}>
       <StatusBar
@@ -216,7 +217,10 @@ const CartScreen = ({ navigation }) => {
       />
       <FlatList
         data={cart}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => {
+          console.log("Item in keyExtractor:", item);
+          return item.id.toString();
+        }}
         renderItem={renderItem}
       />
     </SafeAreaView>

@@ -7,6 +7,7 @@ import MyStore from "./src/redux/store";
 
 export default function App() {
   return (
+    
     <GestureHandlerRootView>
       <Provider store={MyStore}>
         <TabNavigator />
