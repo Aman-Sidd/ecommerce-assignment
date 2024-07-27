@@ -6,27 +6,8 @@ import { TextInput } from "react-native-gesture-handler";
 
 const Header = () => {
   return (
-    <View
-      style={{
-        backgroundColor: "#00CED1",
-        padding: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        zIndex: 100,
-      }}
-    >
-      <Pressable
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginHorizontal: 7,
-          gap: 10,
-          backgroundColor: "white",
-          borderRadius: 3,
-          height: 38,
-          flex: 1,
-        }}
-      >
+    <View style={styles.headerContainer}>
+      <Pressable style={styles.searchBar}>
         <AntDesign
           style={{ paddingLeft: 10 }}
           name="search1"
@@ -42,4 +23,22 @@ const Header = () => {
 
 export default Header;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerContainer: {
+    backgroundColor: "#00CED1",
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 7,
+    gap: 10,
+    backgroundColor: "white",
+    borderRadius: 3,
+    height: 38,
+    flex: 1,
+  },
+});

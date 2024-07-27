@@ -30,7 +30,7 @@ const AddToCartButton = ({ item }) => {
           speed={0.7}
         />
       ) : (
-        <Text>Add to Cart</Text>
+        <Text>Add to Cart </Text>
       )}
     </Pressable>
   );

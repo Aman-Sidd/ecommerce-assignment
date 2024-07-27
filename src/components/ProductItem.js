@@ -20,7 +20,7 @@ const ProductItem = ({ item, onPress = null }) => {
         source={{ uri: item?.image }}
       />
       <Text numberOfLines={1} style={{ width: 150, marginTop: 10 }}>
-        {item.title}
+        {item.title}{" "}
       </Text>
 
       <View
@@ -32,10 +32,10 @@ const ProductItem = ({ item, onPress = null }) => {
         }}
       >
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          Rs. {item?.price}
+          Rs. {item?.price}{" "}
         </Text>
         <Text style={{ color: "#FFC72C", fontWeight: "bold" }}>
-          {item?.rating?.rate} ratings
+          {item?.rating?.rate} ratings{" "}
         </Text>
       </View>
 

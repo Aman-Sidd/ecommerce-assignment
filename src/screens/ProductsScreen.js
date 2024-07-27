@@ -81,7 +81,7 @@ const ProductsScreen = () => {
       ) : (
         <View>
           <View style={styles.dropdownContainer}>
-            <Text style={{ fontSize: 15, fontWeight: "500" }}>
+            <Text style={{ fontSize: 15, fontWeight: "500", marginRight: 7 }}>
               Select Category:{" "}
             </Text>
             <DropDownPicker
@@ -118,23 +118,23 @@ const ProductsScreen = () => {
                       <AntDesign name="closecircleo" size={28} color="black" />
                     </Pressable>
                     <Text style={[styles.modalText, { fontWeight: "bold" }]}>
-                      {selectedProduct.title}
+                      {selectedProduct.title}{" "}
                     </Text>
                     <Image
                       source={{ uri: selectedProduct.image }}
                       style={styles.modalImage}
                     />
                     <Text style={styles.modalText} numberOfLines={10}>
-                      {selectedProduct.description}
+                      {selectedProduct.description}{" "}
                     </Text>
                     <Text style={styles.modalText}>
                       <Text style={{ fontWeight: "bold" }}>Price:</Text> Rs.{" "}
-                      {selectedProduct.price}
+                      {selectedProduct.price}{" "}
                     </Text>
                     <Text style={styles.modalText}>
                       <Text style={{ fontWeight: "bold" }}>Rating:</Text>{" "}
                       {selectedProduct.rating.rate} (
-                      {selectedProduct.rating.count} reviews)
+                      {selectedProduct.rating.count} reviews){" "}
                     </Text>
                     <AddToCartButton item={selectedProduct} />
                   </View>
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   flatlistContainer: {
+    alignItems: "center",
     paddingBottom: 120,
   },
   centeredView: {

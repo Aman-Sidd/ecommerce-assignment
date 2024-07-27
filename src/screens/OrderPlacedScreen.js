@@ -25,7 +25,7 @@ const OrderPlacedScreen = () => {
         loop={false}
         speed={0.7}
       />
-      <Text style={styles.textStyle}>Your Order Has Been Received</Text>
+      <Text style={styles.textStyle}>Your Order Has Been Received </Text>
       <LottieView source={require("../../assets/sparkle.json")} />
     </SafeAreaView>
   );

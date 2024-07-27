@@ -49,16 +49,16 @@ const CartScreen = ({ navigation }) => {
           </View>
           <View>
             <Text numberOfLines={2} style={styles.itemTitle}>
-              {item?.title}
+              {item?.title}{" "}
             </Text>
-            <Text style={styles.itemPrice}>Rs. {item?.price}</Text>
+            <Text style={styles.itemPrice}>Rs. {item?.price} </Text>
             <Image
               style={styles.itemStockImage}
               source={{
                 uri: "https://assets.stickpng.com/thumbs/5f4924cc68ecc7000ae7065.png",
               }}
             />
-            <Text style={styles.itemStockText}>In Stock</Text>
+            <Text style={styles.itemStockText}>In Stock </Text>
           </View>
           <View></View>
         </Pressable>
@@ -81,7 +81,7 @@ const CartScreen = ({ navigation }) => {
               </Pressable>
             )}
             <Pressable style={styles.quantityTextContainer}>
-              <Text>{item?.quantity}</Text>
+              <Text>{item?.quantity} </Text>
             </Pressable>
             <Pressable
               onPress={() => incrementQuant(item)}
@@ -94,7 +94,7 @@ const CartScreen = ({ navigation }) => {
             onPress={() => removeItem(item)}
             style={styles.deleteButton}
           >
-            <Text>Delete</Text>
+            <Text>Delete </Text>
           </Pressable>
         </Pressable>
         <Pressable style={styles.emptyContainer}></Pressable>
@@ -111,20 +111,20 @@ const CartScreen = ({ navigation }) => {
       <Header />
       {cart.length == 0 ? (
         <View style={styles.emptyCartContainer}>
-          <Text style={styles.emptyCartText}>No Items in the Cart.</Text>
+          <Text style={styles.emptyCartText}>No Items in the Cart. </Text>
         </View>
       ) : (
         <View>
           <View style={styles.subtotalContainer}>
             <Text style={styles.subtotalText}>Subtotal : </Text>
-            <Text style={styles.subtotalAmount}>{total}</Text>
+            <Text style={styles.subtotalAmount}>{total} </Text>
           </View>
 
           <Pressable
             onPress={() => navigation.navigate("OrderPlaced")}
             style={styles.proceedButton}
           >
-            <Text>Proceed to Buy ({cart.length}) items</Text>
+            <Text>Proceed to Buy ({cart.length}) items </Text>
           </Pressable>
           <Text style={styles.divider} />
           <FlatList
