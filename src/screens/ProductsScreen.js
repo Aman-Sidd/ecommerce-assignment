@@ -7,6 +7,7 @@ import {
   Pressable,
   Modal,
   Image,
+  Alert,
 } from "react-native";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -17,13 +18,16 @@ import { AntDesign } from "@expo/vector-icons";
 import AddToCartButton from "../utils/AddToCartButton";
 import { BlurView } from "expo-blur";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LottieView from "lottie-react-native";
+import { getProducts } from "../api/getProducts";
 
 const ProductsScreen = () => {
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
-  const [category, setCategory] = useState("jewelery");
+  const [category, setCategory] = useState("electronics");
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [items, setItems] = useState([
     { label: "Men's clothing", value: "men's clothing" },
@@ -32,16 +36,16 @@ const ProductsScreen = () => {
     { label: "Women's clothing", value: "women's clothing" },
   ]);
 
-  const onGenderOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
   useEffect(() => {
     const fetch = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get("https://fakestoreapi.com/products");
-        setProducts(response.data);
+        const response = await getProducts();
+        setProducts(response);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetch();
@@ -61,119 +65,136 @@ const ProductsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <SafeAreaView style={styles.safeAreaStyle}>
       <StatusBar barStyle="light-content" backgroundColor="#00CED1" />
       <Header />
-      <View
-        style={{
-          marginHorizontal: 10,
-          width: "45%",
-          marginLeft: 15,
-          marginTop: 10,
-          marginBottom: open ? 50 : 15,
-        }}
-      >
-        <DropDownPicker
-          style={{
-            borderColor: "#B7B7B7",
-            height: 30,
-            marginBottom: open ? 120 : 15,
-          }}
-          open={open}
-          value={category}
-          items={items}
-          setOpen={setOpen}
-          setValue={setCategory}
-          setItems={setItems}
-          placeholder="choose category"
-          placeholderStyle={{ backgroundColor: "red" }}
-          onOpen={onGenderOpen}
-          zIndex={0}
-          zIndexInverse={0}
-        />
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            {selectedProduct && (
-              <View
-                contentContainerStyle={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Pressable
-                  onPress={() => setModalVisible(!modalVisible)}
-                  style={{
-                    alignSelf: "flex-end",
-                    marginBottom: 5,
-                    paddingLeft: 10,
-                    paddingUp: 4,
-                    paddingBottom: 10,
-                  }}
-                >
-                  <AntDesign name="closecircleo" size={28} color="black" />
-                </Pressable>
-                <Text style={styles.modalText}>{selectedProduct.title}</Text>
-                <Image
-                  source={{ uri: selectedProduct.image }}
-                  style={styles.modalImage}
-                />
-                <Text style={styles.modalText} numberOfLines={10}>
-                  {selectedProduct.description}
-                </Text>
-                <Text style={styles.modalText}>
-                  Price: Rs. {selectedProduct.price}
-                </Text>
-                <Text style={styles.modalText}>
-                  Rating: {selectedProduct.rating.rate} (
-                  {selectedProduct.rating.count} reviews)
-                </Text>
-                <AddToCartButton item={selectedProduct} />
-              </View>
-            )}
-          </View>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <LottieView
+            source={require("../../assets/loading_spinner.json")}
+            style={styles.loadingStyle}
+            autoPlay
+            loop={true}
+            speed={0.7}
+          />
         </View>
-      </Modal>
-      <FlatList
-        data={products?.filter((item) => item.category === category)}
-        keyExtractor={(item) => item?.id.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      />
-      {modalVisible && <BlurView intensity={50} style={styles.absolute} />}
+      ) : (
+        <View>
+          <View style={styles.dropdownContainer}>
+            <Text style={{ fontSize: 15, fontWeight: "500" }}>
+              Select Category:{" "}
+            </Text>
+            <DropDownPicker
+              style={styles.dropdownStyle}
+              open={open}
+              value={category}
+              items={items}
+              setOpen={setOpen}
+              setValue={setCategory}
+              setItems={setItems}
+              placeholder="choose category"
+              placeholderStyle={{ backgroundColor: "red" }}
+              zIndex={0}
+              zIndexInverse={0}
+            />
+          </View>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {selectedProduct && (
+                  <View contentContainerStyle={styles.modalViewContainer}>
+                    <Pressable
+                      onPress={() => setModalVisible(!modalVisible)}
+                      style={styles.crossButton}
+                    >
+                      <AntDesign name="closecircleo" size={28} color="black" />
+                    </Pressable>
+                    <Text style={[styles.modalText, { fontWeight: "bold" }]}>
+                      {selectedProduct.title}
+                    </Text>
+                    <Image
+                      source={{ uri: selectedProduct.image }}
+                      style={styles.modalImage}
+                    />
+                    <Text style={styles.modalText} numberOfLines={10}>
+                      {selectedProduct.description}
+                    </Text>
+                    <Text style={styles.modalText}>
+                      <Text style={{ fontWeight: "bold" }}>Price:</Text> Rs.{" "}
+                      {selectedProduct.price}
+                    </Text>
+                    <Text style={styles.modalText}>
+                      <Text style={{ fontWeight: "bold" }}>Rating:</Text>{" "}
+                      {selectedProduct.rating.rate} (
+                      {selectedProduct.rating.count} reviews)
+                    </Text>
+                    <AddToCartButton item={selectedProduct} />
+                  </View>
+                )}
+              </View>
+            </View>
+          </Modal>
+          <FlatList
+            data={products?.filter((item) => item.category === category)}
+            keyExtractor={(item) => item?.id.toString()}
+            numColumns={2}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatlistContainer}
+          />
+          {modalVisible && <BlurView intensity={50} style={styles.absolute} />}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaStyle: {
+    backgroundColor: "white",
     flex: 1,
-    padding: 16,
   },
-  productItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+  loadingContainer: { flex: 1, alignItems: "center", justifyContent: "center" },
+  loadingStyle: {
+    height: 50,
+    width: 50,
+    alignSelf: "center",
+    justifyContent: "center",
   },
-  productName: {
-    fontSize: 16,
+  dropdownContainer: {
+    marginHorizontal: 10,
+    marginLeft: 15,
+    marginVertical: 20,
+    zIndex: 1,
+    flexDirection: "row",
+    width: "45%",
+    alignItems: "center",
   },
-  productPrice: {
-    fontSize: 14,
-    color: "#888",
+  dropdownStyle: {
+    borderColor: "#B7B7B7",
+    height: 30,
+    // width: "45%",
+  },
+  modalViewContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  crossButton: {
+    alignSelf: "flex-end",
+    marginBottom: 5,
+    paddingLeft: 10,
+    paddingUp: 4,
+    paddingBottom: 10,
+  },
+  flatlistContainer: {
+    paddingBottom: 120,
   },
   centeredView: {
     flex: 1,

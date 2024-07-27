@@ -6,6 +6,25 @@ import CartScreen from "../screens/CartScreen";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import OrderPlacedScreen from "../screens/OrderPlacedScreen";
+
+const StackNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Products"
+        component={ProductsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="OrderPlaced"
+        component={OrderPlacedScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -13,8 +32,8 @@ export const TabNavigator = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="Products"
-          component={ProductsScreen}
+          name="Home"
+          component={StackNavigator}
           options={{
             tabBarLabel: "Home",
             tabBarLevelStyle: { color: "#008E97" },
